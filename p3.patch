@@ -1,0 +1,28 @@
+diff --git a/MdePkg/Library/BaseLib/SafeString.c b/MdePkg/Library/BaseLib/SafeString.c
+index 954d3f8c89..939722f812 100644
+--- a/MdePkg/Library/BaseLib/SafeString.c
++++ b/MdePkg/Library/BaseLib/SafeString.c
+@@ -1230,8 +1230,11 @@ StrToIpv6Address (
+         // Uintn won't exceed MAX_UINT16 if number of hexadecimal digit characters is no more than 4.
+         //
+         ASSERT (AddressIndex + 1 < ARRAY_SIZE (Address->Addr));
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wstringop-overflow"
+         LocalAddress.Addr[AddressIndex]     = (UINT8)((UINT16)Uintn >> 8);
+         LocalAddress.Addr[AddressIndex + 1] = (UINT8)Uintn;
++#pragma GCC diagnostic pop
+         AddressIndex                       += 2;
+       } else {
+         //
+@@ -3194,8 +3197,11 @@ AsciiStrToIpv6Address (
+         // Uintn won't exceed MAX_UINT16 if number of hexadecimal digit characters is no more than 4.
+         //
+         ASSERT (AddressIndex + 1 < ARRAY_SIZE (Address->Addr));
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wstringop-overflow"
+         LocalAddress.Addr[AddressIndex]     = (UINT8)((UINT16)Uintn >> 8);
+         LocalAddress.Addr[AddressIndex + 1] = (UINT8)Uintn;
++#pragma GCC diagnostic pop
+         AddressIndex                       += 2;
+       } else {
+         //
