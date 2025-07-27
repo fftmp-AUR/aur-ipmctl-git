@@ -1,14 +1,15 @@
-# Maintainer: Jianqiu Zhang <void001@archlinuxcn.org>
+# Maintainer: fft
+# Contributor: Jianqiu Zhang <void001@archlinuxcn.org>
 
 pkgname=ipmctl-git
 pkgver=v03.00.00.0485.2.r5.gd2caed16
-pkgrel=1
+pkgrel=2
 pkgdesc="util for configuring and managing Intel Optane DC persistent memory modules (DCPMM)."
 arch=('x86_64')
 url="https://github.com/intel/ipmctl"
 license=('BSD-3-Clause')
 depends=("ndctl")
-makedepends=("cmake" "git" "python3" "patch")
+makedepends=("asciidoctor" "cmake" "git" "python3" "patch")
 
 source=(
   ${pkgname}::git+https://github.com/intel/ipmctl
@@ -42,13 +43,13 @@ prepare() {
 build() {
   cd "${srcdir}/${pkgname}"
   mkdir -p build && cd build
-  cmake -DRELEASE=ON -DCMAKE_INSTALL_PREFIX="${pkgdir}/usr" ..
+  cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DRELEASE=ON -DCMAKE_INSTALL_PREFIX="/usr" ..
   cmake --build ./
 }
 
 package() {
   cd "${srcdir}/${pkgname}/build"
-  cmake --build ./ --target install
+  cmake --build ./ --target install DESTDIR="${pkgdir}"
   mv "${pkgdir}/usr/etc" "${pkgdir}/etc"
   rm -r "${pkgdir}/usr/var" "${pkgdir}/usr/share/doc/ipmctl/LICENSE"
   install -Dm644 "${srcdir}/${pkgname}/LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
